@@ -102,6 +102,8 @@
         cadesplugin.CADESCOM_XML_SIGNATURE_TYPE_ENVELOPING = 1;
         cadesplugin.CADESCOM_XML_SIGNATURE_TYPE_TEMPLATE = 2;
 
+        cadesplugin.CADESCOM_XADES_BES = 0x00000020;
+
         cadesplugin.XmlDsigGost3410UrlObsolete = "http://www.w3.org/2001/04/xmldsig-more#gostr34102001-gostr3411";
         cadesplugin.XmlDsigGost3411UrlObsolete = "http://www.w3.org/2001/04/xmldsig-more#gostr3411";
         cadesplugin.XmlDsigGost3410Url = "urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34102001-gostr3411";
