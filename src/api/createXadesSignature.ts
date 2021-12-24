@@ -4,7 +4,7 @@ import { __cadesAsyncToken__, __createCadesPluginObject__, _generateCadesFn } fr
 import { _getCadesCert } from '../helpers/_getCadesCert';
 
 /**
- * Создает XADES подпись для документа в формате XML
+ * Создает XADES-BES подпись для документа в формате XML
  *
  * @param thumbprint - отпечаток сертификата
  * @param unencryptedMessage - подписываемое сообщение в формате XML
@@ -20,6 +20,30 @@ export const createXadesSignature = _afterPluginsLoaded(
         let cadesSigner;
         let cadesSignedXML;
 
+        const sContent = `<?xml version="1.0" encoding="UTF-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+    <s:Body>
+        <Document xml:id="documentContent">
+            ${unencryptedMessage}
+        </Document>
+    </s:Body>
+    <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature1-bd693fe01-0beb-8cc1-28a3-8b798f95ec6">
+        <ds:SignedInfo>
+            <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+            <ds:SignatureMethod Algorithm="urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34102012-gostr34112012-256"/>
+            <ds:Reference URI="#documentContent">
+                <ds:Transforms>
+                    <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+                </ds:Transforms>
+                <ds:DigestMethod Algorithm="urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34112012-256"/>
+                <ds:DigestValue/>
+            </ds:Reference>
+        </ds:SignedInfo>
+        <ds:SignatureValue/>
+        <ds:KeyInfo/>
+    </ds:Signature>
+</s:Envelope>`;
+
         try {
           cadesSigner = __cadesAsyncToken__ + __createCadesPluginObject__('CAdESCOM.CPSigner');
           cadesSignedXML = __cadesAsyncToken__ + __createCadesPluginObject__('CAdESCOM.SignedXML');
@@ -30,20 +54,15 @@ export const createXadesSignature = _afterPluginsLoaded(
         }
 
         try {
-          const signatureMethod = 'urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34102012-gostr34112012-256';
-          const digestMethod = 'urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34112012-256';
-
           void (__cadesAsyncToken__ + cadesSigner.propset_Certificate(cadesCertificate));
           void (__cadesAsyncToken__ + cadesSigner.propset_CheckCertificate(false));
-          void (__cadesAsyncToken__ + cadesSignedXML.propset_Content(unencryptedMessage));
+          void (__cadesAsyncToken__ + cadesSignedXML.propset_Content(sContent));
           void (
             __cadesAsyncToken__ +
             cadesSignedXML.propset_SignatureType(
-              cadesplugin.CADESCOM_XML_SIGNATURE_TYPE_ENVELOPED | cadesplugin.CADESCOM_XADES_BES,
+              cadesplugin.CADESCOM_XML_SIGNATURE_TYPE_TEMPLATE | cadesplugin.CADESCOM_XADES_BES,
             )
           );
-          void (__cadesAsyncToken__ + cadesSignedXML.propset_SignatureMethod(signatureMethod));
-          void (__cadesAsyncToken__ + cadesSignedXML.propset_DigestMethod(digestMethod));
         } catch (error) {
           console.error(error);
 
