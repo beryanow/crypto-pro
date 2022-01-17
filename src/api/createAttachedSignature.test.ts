@@ -1,6 +1,6 @@
 import 'cadesplugin';
 import { rawCertificates, parsedCertificates } from '../__mocks__/certificates';
-import { createAttachedSignature } from './createAttachedSignature';
+import { createCadesSignature } from './createCadesSignature';
 import { _getCadesCert } from '../helpers/_getCadesCert';
 
 const [rawCertificateMock] = rawCertificates;
@@ -55,7 +55,7 @@ describe('createAttachedSignature', () => {
       toString: jest.fn(),
     }));
 
-    await createAttachedSignature(parsedCertificateMock.thumbprint, 'message');
+    await createCadesSignature(parsedCertificateMock.thumbprint, 'message', false);
 
     expect(global.Buffer.from).toHaveBeenCalledTimes(1);
 
@@ -63,13 +63,13 @@ describe('createAttachedSignature', () => {
   });
 
   test('uses specified certificate', async () => {
-    await createAttachedSignature(parsedCertificateMock.thumbprint, 'message');
+    await createCadesSignature(parsedCertificateMock.thumbprint, 'message', false);
 
     expect(_getCadesCert).toHaveBeenCalledWith(parsedCertificateMock.thumbprint);
   });
 
   test('returns signature', async () => {
-    const signature = await createAttachedSignature(parsedCertificateMock.thumbprint, 'message');
+    const signature = await createCadesSignature(parsedCertificateMock.thumbprint, 'message', false);
 
     expect(signature).toEqual('signature');
   });

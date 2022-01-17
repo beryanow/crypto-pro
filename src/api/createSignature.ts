@@ -18,7 +18,7 @@ export const createSignature = _afterPluginsLoaded(
     console.warn(
       [
         'cryptoPro: Метод "createSignature" является устаревшим и будет убран из будущих версий.',
-        'Используйте "createAttachedSignature" и "createDetachedSignature".',
+        'Используйте "createCadesSignature" и "createDetachedSignature".',
       ].join('\n'),
     );
 

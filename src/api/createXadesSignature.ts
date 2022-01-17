@@ -56,6 +56,9 @@ export const createXadesSignature = _afterPluginsLoaded(
         try {
           void (__cadesAsyncToken__ + cadesSigner.propset_Certificate(cadesCertificate));
           void (__cadesAsyncToken__ + cadesSigner.propset_CheckCertificate(false));
+          void (
+            __cadesAsyncToken__ + cadesSigner.propset_Options(cadesplugin.CAPICOM_CERTIFICATE_INCLUDE_END_ENTITY_ONLY)
+          );
           void (__cadesAsyncToken__ + cadesSignedXML.propset_Content(sContent));
           void (
             __cadesAsyncToken__ +
