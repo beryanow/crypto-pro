@@ -3064,6 +3064,112 @@ exports.createHash = _afterPluginsLoaded_1._afterPluginsLoaded(function (unencry
 
 /***/ }),
 
+/***/ "./api/createPKCS7Signature.ts":
+/*!*************************************!*\
+  !*** ./api/createPKCS7Signature.ts ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var _afterPluginsLoaded_1 = __webpack_require__(/*! ../helpers/_afterPluginsLoaded */ "./helpers/_afterPluginsLoaded.ts");
+var _extractMeaningfulErrorMessage_1 = __webpack_require__(/*! ../helpers/_extractMeaningfulErrorMessage */ "./helpers/_extractMeaningfulErrorMessage.ts");
+var _generateCadesFn_1 = __webpack_require__(/*! ../helpers/_generateCadesFn */ "./helpers/_generateCadesFn.ts");
+var _getCadesCert_1 = __webpack_require__(/*! ../helpers/_getCadesCert */ "./helpers/_getCadesCert.ts");
+/**
+ * Создает присоединенную подпись сообщения по отпечатку сертификата
+ *
+ * @param thumbprint - отпечаток сертификата
+ * @param message - подписываемое сообщение
+ * @returns подпись в формате PKCS#7
+ */
+exports.createPKCS7Signature = _afterPluginsLoaded_1._afterPluginsLoaded(function (thumbprint, unencryptedMessage, detached) { return __awaiter(void 0, void 0, void 0, function () {
+    var cadesplugin, cadesCertificate;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                cadesplugin = window.cadesplugin;
+                return [4 /*yield*/, _getCadesCert_1._getCadesCert(thumbprint)];
+            case 1:
+                cadesCertificate = _a.sent();
+                return [2 /*return*/, eval(_generateCadesFn_1._generateCadesFn(function createAttachedSignature() {
+                        var cadesSigner;
+                        var cadesSignedData;
+                        try {
+                            cadesSigner = _generateCadesFn_1.__cadesAsyncToken__ + _generateCadesFn_1.__createCadesPluginObject__('CAdESCOM.CPSigner');
+                            cadesSignedData = _generateCadesFn_1.__cadesAsyncToken__ + _generateCadesFn_1.__createCadesPluginObject__('CAdESCOM.CadesSignedData');
+                        }
+                        catch (error) {
+                            console.error(error);
+                            throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при инициализации подписи');
+                        }
+                        try {
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_Certificate(cadesCertificate));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_CheckCertificate(false));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_Options(cadesplugin.CAPICOM_CERTIFICATE_INCLUDE_END_ENTITY_ONLY));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSignedData.propset_ContentEncoding(cadesplugin.CADESCOM_BASE64_TO_BINARY));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSignedData.propset_Content(unencryptedMessage));
+                        }
+                        catch (error) {
+                            console.error(error);
+                            throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при указании данных для подписи');
+                        }
+                        var signature;
+                        try {
+                            signature =
+                                _generateCadesFn_1.__cadesAsyncToken__ + cadesSignedData.SignCades(cadesSigner, cadesplugin.CADESCOM_PKCS7_TYPE, detached);
+                        }
+                        catch (error) {
+                            console.error(error);
+                            throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при подписании данных');
+                        }
+                        return signature;
+                    }))];
+        }
+    });
+}); });
+
+
+/***/ }),
+
 /***/ "./api/createSignature.ts":
 /*!********************************!*\
   !*** ./api/createSignature.ts ***!
@@ -3190,6 +3296,227 @@ exports.createSignature = _afterPluginsLoaded_1._afterPluginsLoaded(function (th
         });
     });
 });
+
+
+/***/ }),
+
+/***/ "./api/createXMLDSigSignature.ts":
+/*!***************************************!*\
+  !*** ./api/createXMLDSigSignature.ts ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var _afterPluginsLoaded_1 = __webpack_require__(/*! ../helpers/_afterPluginsLoaded */ "./helpers/_afterPluginsLoaded.ts");
+var _extractMeaningfulErrorMessage_1 = __webpack_require__(/*! ../helpers/_extractMeaningfulErrorMessage */ "./helpers/_extractMeaningfulErrorMessage.ts");
+var _generateCadesFn_1 = __webpack_require__(/*! ../helpers/_generateCadesFn */ "./helpers/_generateCadesFn.ts");
+var _getCadesCert_1 = __webpack_require__(/*! ../helpers/_getCadesCert */ "./helpers/_getCadesCert.ts");
+/**
+ * Создает XML-DSig подпись для документа в формате XML
+ *
+ * @param thumbprint - отпечаток сертификата
+ * @param unencryptedMessage - подписываемое сообщение в формате XML
+ * @returns подпись
+ */
+exports.createXMLDSigSignature = _afterPluginsLoaded_1._afterPluginsLoaded(function (thumbprint, unencryptedMessage) { return __awaiter(void 0, void 0, void 0, function () {
+    var cadesplugin, cadesCertificate;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                cadesplugin = window.cadesplugin;
+                return [4 /*yield*/, _getCadesCert_1._getCadesCert(thumbprint)];
+            case 1:
+                cadesCertificate = _a.sent();
+                unencryptedMessage = decodeURIComponent(atob(unencryptedMessage)
+                    .split('')
+                    .map(function (c) { return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); })
+                    .join(''));
+                return [2 /*return*/, eval(_generateCadesFn_1._generateCadesFn(function createXMLSignature() {
+                        var cadesSigner;
+                        var cadesSignedXML;
+                        try {
+                            cadesSigner = _generateCadesFn_1.__cadesAsyncToken__ + _generateCadesFn_1.__createCadesPluginObject__('CAdESCOM.CPSigner');
+                            cadesSignedXML = _generateCadesFn_1.__cadesAsyncToken__ + _generateCadesFn_1.__createCadesPluginObject__('CAdESCOM.SignedXML');
+                        }
+                        catch (error) {
+                            console.error(error);
+                            throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при инициализации подписи');
+                        }
+                        try {
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_Certificate(cadesCertificate));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_CheckCertificate(false));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_Options(cadesplugin.CAPICOM_CERTIFICATE_INCLUDE_END_ENTITY_ONLY));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSignedXML.propset_Content(unencryptedMessage));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ +
+                                cadesSignedXML.propset_SignatureType(cadesplugin.CADESCOM_XML_SIGNATURE_TYPE_ENVELOPED | cadesplugin.CADESCOM_XMLDSIG_TYPE));
+                        }
+                        catch (error) {
+                            console.error(error);
+                            throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при указании данных для подписи');
+                        }
+                        var signature;
+                        try {
+                            signature = _generateCadesFn_1.__cadesAsyncToken__ + cadesSignedXML.Sign(cadesSigner);
+                        }
+                        catch (error) {
+                            console.error(error);
+                            throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при подписании данных');
+                        }
+                        return btoa(encodeURIComponent(signature).replace(/%([0-9A-F]{2})/g, function (_, p1) {
+                            return String.fromCharCode(parseInt('0x' + p1, 16));
+                        }));
+                    }))];
+        }
+    });
+}); });
+
+
+/***/ }),
+
+/***/ "./api/createXMLDSigTemplateSignature.ts":
+/*!***********************************************!*\
+  !*** ./api/createXMLDSigTemplateSignature.ts ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var _afterPluginsLoaded_1 = __webpack_require__(/*! ../helpers/_afterPluginsLoaded */ "./helpers/_afterPluginsLoaded.ts");
+var _extractMeaningfulErrorMessage_1 = __webpack_require__(/*! ../helpers/_extractMeaningfulErrorMessage */ "./helpers/_extractMeaningfulErrorMessage.ts");
+var _generateCadesFn_1 = __webpack_require__(/*! ../helpers/_generateCadesFn */ "./helpers/_generateCadesFn.ts");
+var _getCadesCert_1 = __webpack_require__(/*! ../helpers/_getCadesCert */ "./helpers/_getCadesCert.ts");
+/**
+ * Создает XML-DSig подпись для документа в формате XML
+ *
+ * @param thumbprint - отпечаток сертификата
+ * @param unencryptedMessage - подписываемое сообщение в формате XML
+ * @returns подпись
+ */
+exports.createXMLDSigTemplateSignature = _afterPluginsLoaded_1._afterPluginsLoaded(function (thumbprint, unencryptedMessage) { return __awaiter(void 0, void 0, void 0, function () {
+    var cadesplugin, cadesCertificate;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                cadesplugin = window.cadesplugin;
+                return [4 /*yield*/, _getCadesCert_1._getCadesCert(thumbprint)];
+            case 1:
+                cadesCertificate = _a.sent();
+                return [2 /*return*/, eval(_generateCadesFn_1._generateCadesFn(function createXMLSignature() {
+                        var cadesSigner;
+                        var cadesSignedXML;
+                        var sContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">\n    <s:Body>\n        <Document xml:id=\"documentContent\">\n            " + unencryptedMessage + "\n        </Document>\n    </s:Body>\n    <ds:Signature xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" Id=\"Signature1-bd693fe01-0beb-8cc1-28a3-8b798f95ec6\">\n        <ds:SignedInfo>\n            <ds:CanonicalizationMethod Algorithm=\"http://www.w3.org/2001/10/xml-exc-c14n#\"/>\n            <ds:SignatureMethod Algorithm=\"urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34102012-gostr34112012-256\"/>\n            <ds:Reference URI=\"#documentContent\">\n                <ds:Transforms>\n                    <ds:Transform Algorithm=\"http://www.w3.org/2000/09/xmldsig#enveloped-signature\"/>\n                </ds:Transforms>\n                <ds:DigestMethod Algorithm=\"urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34112012-256\"/>\n                <ds:DigestValue/>\n            </ds:Reference>\n        </ds:SignedInfo>\n        <ds:SignatureValue/>\n        <ds:KeyInfo/>\n    </ds:Signature>\n</s:Envelope>";
+                        try {
+                            cadesSigner = _generateCadesFn_1.__cadesAsyncToken__ + _generateCadesFn_1.__createCadesPluginObject__('CAdESCOM.CPSigner');
+                            cadesSignedXML = _generateCadesFn_1.__cadesAsyncToken__ + _generateCadesFn_1.__createCadesPluginObject__('CAdESCOM.SignedXML');
+                        }
+                        catch (error) {
+                            console.error(error);
+                            throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при инициализации подписи');
+                        }
+                        try {
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_Certificate(cadesCertificate));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_CheckCertificate(false));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_Options(cadesplugin.CAPICOM_CERTIFICATE_INCLUDE_END_ENTITY_ONLY));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSignedXML.propset_Content(sContent));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ +
+                                cadesSignedXML.propset_SignatureType(cadesplugin.CADESCOM_XML_SIGNATURE_TYPE_TEMPLATE | cadesplugin.CADESCOM_XMLDSIG_TYPE));
+                        }
+                        catch (error) {
+                            console.error(error);
+                            throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при указании данных для подписи');
+                        }
+                        var signature;
+                        try {
+                            signature = _generateCadesFn_1.__cadesAsyncToken__ + cadesSignedXML.Sign(cadesSigner);
+                        }
+                        catch (error) {
+                            console.error(error);
+                            throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при подписании данных');
+                        }
+                        return btoa(encodeURIComponent(signature).replace(/%([0-9A-F]{2})/g, function (_, p1) {
+                            return String.fromCharCode(parseInt('0x' + p1, 16));
+                        }));
+                    }))];
+        }
+    });
+}); });
 
 
 /***/ }),
@@ -3369,10 +3696,122 @@ exports.createXadesSignature = _afterPluginsLoaded_1._afterPluginsLoaded(functio
                 return [4 /*yield*/, _getCadesCert_1._getCadesCert(thumbprint)];
             case 1:
                 cadesCertificate = _a.sent();
+                unencryptedMessage = decodeURIComponent(atob(unencryptedMessage)
+                    .split('')
+                    .map(function (c) { return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); })
+                    .join(''));
                 return [2 /*return*/, eval(_generateCadesFn_1._generateCadesFn(function createXMLSignature() {
                         var cadesSigner;
                         var cadesSignedXML;
-                        var sContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">\n    <s:Body>\n        <Document xml:id=\"documentContent\">\n            " + unencryptedMessage + "\n        </Document>\n    </s:Body>\n    <ds:Signature xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" Id=\"Signature1-bd693fe01-0beb-8cc1-28a3-8b798f95ec6\">\n        <ds:SignedInfo>\n            <ds:CanonicalizationMethod Algorithm=\"http://www.w3.org/2001/10/xml-exc-c14n#\"/>\n            <ds:SignatureMethod Algorithm=\"urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34102012-gostr34112012-256\"/>\n            <ds:Reference URI=\"#documentContent\">\n                <ds:Transforms>\n                    <ds:Transform Algorithm=\"http://www.w3.org/2000/09/xmldsig#enveloped-signature\"/>\n                </ds:Transforms>\n                <ds:DigestMethod Algorithm=\"urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34112012-256\"/>\n                <ds:DigestValue/>\n            </ds:Reference>\n        </ds:SignedInfo>\n        <ds:SignatureValue/>\n        <ds:KeyInfo/>\n    </ds:Signature>\n</s:Envelope>";
+                        try {
+                            cadesSigner = _generateCadesFn_1.__cadesAsyncToken__ + _generateCadesFn_1.__createCadesPluginObject__('CAdESCOM.CPSigner');
+                            cadesSignedXML = _generateCadesFn_1.__cadesAsyncToken__ + _generateCadesFn_1.__createCadesPluginObject__('CAdESCOM.SignedXML');
+                        }
+                        catch (error) {
+                            console.error(error);
+                            throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при инициализации подписи');
+                        }
+                        try {
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_Certificate(cadesCertificate));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_CheckCertificate(false));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_Options(cadesplugin.CAPICOM_CERTIFICATE_INCLUDE_END_ENTITY_ONLY));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSignedXML.propset_Content(unencryptedMessage));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ +
+                                cadesSignedXML.propset_SignatureType(cadesplugin.CADESCOM_XML_SIGNATURE_TYPE_ENVELOPED | cadesplugin.CADESCOM_XADES_BES));
+                        }
+                        catch (error) {
+                            console.error(error);
+                            throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при указании данных для подписи');
+                        }
+                        var signature;
+                        try {
+                            signature = _generateCadesFn_1.__cadesAsyncToken__ + cadesSignedXML.Sign(cadesSigner);
+                        }
+                        catch (error) {
+                            console.error(error);
+                            throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при подписании данных');
+                        }
+                        return btoa(encodeURIComponent(signature).replace(/%([0-9A-F]{2})/g, function (_, p1) {
+                            return String.fromCharCode(parseInt('0x' + p1, 16));
+                        }));
+                    }))];
+        }
+    });
+}); });
+
+
+/***/ }),
+
+/***/ "./api/createXadesTemplateSignature.ts":
+/*!*********************************************!*\
+  !*** ./api/createXadesTemplateSignature.ts ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var _afterPluginsLoaded_1 = __webpack_require__(/*! ../helpers/_afterPluginsLoaded */ "./helpers/_afterPluginsLoaded.ts");
+var _extractMeaningfulErrorMessage_1 = __webpack_require__(/*! ../helpers/_extractMeaningfulErrorMessage */ "./helpers/_extractMeaningfulErrorMessage.ts");
+var _generateCadesFn_1 = __webpack_require__(/*! ../helpers/_generateCadesFn */ "./helpers/_generateCadesFn.ts");
+var _getCadesCert_1 = __webpack_require__(/*! ../helpers/_getCadesCert */ "./helpers/_getCadesCert.ts");
+/**
+ * Создает XADES-BES подпись для документа в формате XML
+ *
+ * @param thumbprint - отпечаток сертификата
+ * @param unencryptedMessage - подписываемое сообщение в формате XML
+ * @returns подпись
+ */
+exports.createXadesTemplateSignature = _afterPluginsLoaded_1._afterPluginsLoaded(function (thumbprint, unencryptedMessage) { return __awaiter(void 0, void 0, void 0, function () {
+    var cadesplugin, cadesCertificate;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                cadesplugin = window.cadesplugin;
+                return [4 /*yield*/, _getCadesCert_1._getCadesCert(thumbprint)];
+            case 1:
+                cadesCertificate = _a.sent();
+                return [2 /*return*/, eval(_generateCadesFn_1._generateCadesFn(function createXMLSignature() {
+                        var cadesSigner;
+                        var cadesSignedXML;
+                        var sContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">\n    <s:Body>\n        <Document xml:id=\"base64-content\">\n            " + unencryptedMessage + "\n        </Document>\n    </s:Body>\n    <ds:Signature xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" Id=\"base64-content-signature\">\n        <ds:SignedInfo>\n            <ds:CanonicalizationMethod Algorithm=\"http://www.w3.org/2001/10/xml-exc-c14n#\"/>\n            <ds:SignatureMethod Algorithm=\"urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34102012-gostr34112012-256\"/>\n            <ds:Reference URI=\"#base64-content\">\n                <ds:Transforms>\n                    <ds:Transform Algorithm=\"http://www.w3.org/2000/09/xmldsig#enveloped-signature\"/>\n                </ds:Transforms>\n                <ds:DigestMethod Algorithm=\"urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34112012-256\"/>\n                <ds:DigestValue/>\n            </ds:Reference>\n        </ds:SignedInfo>\n        <ds:SignatureValue/>\n        <ds:KeyInfo/>\n    </ds:Signature>\n</s:Envelope>";
                         try {
                             cadesSigner = _generateCadesFn_1.__cadesAsyncToken__ + _generateCadesFn_1.__createCadesPluginObject__('CAdESCOM.CPSigner');
                             cadesSignedXML = _generateCadesFn_1.__cadesAsyncToken__ + _generateCadesFn_1.__createCadesPluginObject__('CAdESCOM.SignedXML');
@@ -3401,7 +3840,136 @@ exports.createXadesSignature = _afterPluginsLoaded_1._afterPluginsLoaded(functio
                             console.error(error);
                             throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при подписании данных');
                         }
-                        return signature;
+                        return btoa(encodeURIComponent(signature).replace(/%([0-9A-F]{2})/g, function (_, p1) {
+                            return String.fromCharCode(parseInt('0x' + p1, 16));
+                        }));
+                    }))];
+        }
+    });
+}); });
+
+
+/***/ }),
+
+/***/ "./api/createXadesXsltSignature.ts":
+/*!*****************************************!*\
+  !*** ./api/createXadesXsltSignature.ts ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var _afterPluginsLoaded_1 = __webpack_require__(/*! ../helpers/_afterPluginsLoaded */ "./helpers/_afterPluginsLoaded.ts");
+var _extractMeaningfulErrorMessage_1 = __webpack_require__(/*! ../helpers/_extractMeaningfulErrorMessage */ "./helpers/_extractMeaningfulErrorMessage.ts");
+var _generateCadesFn_1 = __webpack_require__(/*! ../helpers/_generateCadesFn */ "./helpers/_generateCadesFn.ts");
+var _getCadesCert_1 = __webpack_require__(/*! ../helpers/_getCadesCert */ "./helpers/_getCadesCert.ts");
+/**
+ * Создает XADES-BES подпись для документа в формате XML
+ *
+ * @param thumbprint - отпечаток сертификата
+ * @param unencryptedMessage - подписываемое сообщение в формате XML
+ * @returns подпись
+ */
+exports.createXadesXsltSignature = _afterPluginsLoaded_1._afterPluginsLoaded(function (thumbprint, unencryptedMessage, xsltSchemaMessage) { return __awaiter(void 0, void 0, void 0, function () {
+    var cadesplugin, cadesCertificate, signatureTemplate, parsedXml, rootClosingElementIndex, templateXml;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                cadesplugin = window.cadesplugin;
+                return [4 /*yield*/, _getCadesCert_1._getCadesCert(thumbprint)];
+            case 1:
+                cadesCertificate = _a.sent();
+                unencryptedMessage = decodeURIComponent(atob(unencryptedMessage)
+                    .split('')
+                    .map(function (c) { return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); })
+                    .join(''));
+                xsltSchemaMessage = decodeURIComponent(atob(xsltSchemaMessage)
+                    .split('')
+                    .map(function (c) { return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); })
+                    .join(''));
+                signatureTemplate = "<ds:Signature xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" Id=\"xslt-transformed-xml-signature\">\n        <ds:SignedInfo>\n            <ds:CanonicalizationMethod Algorithm=\"http://www.w3.org/2001/10/xml-exc-c14n#\"/>\n            <ds:SignatureMethod Algorithm=\"urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34102012-gostr34112012-256\"/>\n                <ds:Reference URI=\"\">\n                <ds:Transforms>\n                    <ds:Transform Algorithm=\"http://www.w3.org/TR/1999/REC-xslt-19991116\">\n                        " + xsltSchemaMessage + "\n                    </ds:Transform>\n                    <ds:Transform Algorithm=\"http://www.w3.org/2000/09/xmldsig#enveloped-signature\"/>\n                </ds:Transforms>\n                <ds:DigestMethod Algorithm=\"urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34112012-256\"/>\n                <ds:DigestValue/>\n                </ds:Reference>\n        </ds:SignedInfo>\n        <ds:SignatureValue/>\n        <ds:KeyInfo/>\n    </ds:Signature>";
+                parsedXml = new DOMParser().parseFromString(unencryptedMessage, 'text/xml');
+                parsedXml.documentElement.append(signatureTemplate);
+                rootClosingElementIndex = unencryptedMessage.lastIndexOf("</" + parsedXml.documentElement.nodeName + ">");
+                console.log(unencryptedMessage);
+                console.log(parsedXml.documentElement.nodeName);
+                console.log(rootClosingElementIndex);
+                templateXml = new XMLSerializer().serializeToString(parsedXml)
+                    .replace(/&lt;/g, '<')
+                    .replace(/&gt;/g, '>');
+                console.log(templateXml);
+                return [2 /*return*/, eval(_generateCadesFn_1._generateCadesFn(function createXMLSignature() {
+                        var cadesSigner;
+                        var cadesSignedXML;
+                        try {
+                            cadesSigner = _generateCadesFn_1.__cadesAsyncToken__ + _generateCadesFn_1.__createCadesPluginObject__('CAdESCOM.CPSigner');
+                            cadesSignedXML = _generateCadesFn_1.__cadesAsyncToken__ + _generateCadesFn_1.__createCadesPluginObject__('CAdESCOM.SignedXML');
+                        }
+                        catch (error) {
+                            console.error(error);
+                            throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при инициализации подписи');
+                        }
+                        try {
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_Certificate(cadesCertificate));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_CheckCertificate(false));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_Options(cadesplugin.CAPICOM_CERTIFICATE_INCLUDE_END_ENTITY_ONLY));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSignedXML.propset_Content(templateXml));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ +
+                                cadesSignedXML.propset_SignatureType(cadesplugin.CADESCOM_XML_SIGNATURE_TYPE_TEMPLATE | cadesplugin.CADESCOM_XADES_BES));
+                        }
+                        catch (error) {
+                            console.error(error);
+                            throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при указании данных для подписи');
+                        }
+                        var signature;
+                        try {
+                            signature = _generateCadesFn_1.__cadesAsyncToken__ + cadesSignedXML.Sign(cadesSigner);
+                        }
+                        catch (error) {
+                            console.error(error);
+                            throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при подписании данных');
+                        }
+                        return btoa(encodeURIComponent(signature).replace(/%([0-9A-F]{2})/g, function (_, p1) {
+                            return String.fromCharCode(parseInt('0x' + p1, 16));
+                        }));
                     }))];
         }
     });
@@ -3730,7 +4298,12 @@ __export(__webpack_require__(/*! ./getSystemInfo */ "./api/getSystemInfo.ts"));
 __export(__webpack_require__(/*! ./isValidSystemSetup */ "./api/isValidSystemSetup.ts"));
 __export(__webpack_require__(/*! ./createSignature */ "./api/createSignature.ts"));
 __export(__webpack_require__(/*! ./createXMLSignature */ "./api/createXMLSignature.ts"));
+__export(__webpack_require__(/*! ./createXadesTemplateSignature */ "./api/createXadesTemplateSignature.ts"));
 __export(__webpack_require__(/*! ./createXadesSignature */ "./api/createXadesSignature.ts"));
+__export(__webpack_require__(/*! ./createXadesXsltSignature */ "./api/createXadesXsltSignature.ts"));
+__export(__webpack_require__(/*! ./createPKCS7Signature */ "./api/createPKCS7Signature.ts"));
+__export(__webpack_require__(/*! ./createXMLDSigTemplateSignature */ "./api/createXMLDSigTemplateSignature.ts"));
+__export(__webpack_require__(/*! ./createXMLDSigSignature */ "./api/createXMLDSigSignature.ts"));
 __export(__webpack_require__(/*! ./createDetachedSignature */ "./api/createDetachedSignature.ts"));
 __export(__webpack_require__(/*! ./createCadesSignature */ "./api/createCadesSignature.ts"));
 __export(__webpack_require__(/*! ./createHash */ "./api/createHash.ts"));

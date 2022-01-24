@@ -4,32 +4,25 @@ import { __cadesAsyncToken__, __createCadesPluginObject__, _generateCadesFn } fr
 import { _getCadesCert } from '../helpers/_getCadesCert';
 
 /**
- * Создает XADES-BES подпись для документа в формате XML
+ * Создает присоединенную подпись сообщения по отпечатку сертификата
  *
  * @param thumbprint - отпечаток сертификата
- * @param unencryptedMessage - подписываемое сообщение в формате XML
- * @returns подпись
+ * @param message - подписываемое сообщение
+ * @returns подпись в формате PKCS#7
  */
-export const createXadesSignature = _afterPluginsLoaded(
-  async (thumbprint: string, unencryptedMessage: string): Promise<string> => {
+export const createPKCS7Signature = _afterPluginsLoaded(
+  async (thumbprint: string, unencryptedMessage: string | ArrayBuffer, detached: boolean): Promise<string> => {
     const { cadesplugin } = window;
     const cadesCertificate = await _getCadesCert(thumbprint);
 
-    unencryptedMessage = decodeURIComponent(
-      atob(unencryptedMessage)
-        .split('')
-        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join(''),
-    );
-
     return eval(
-      _generateCadesFn(function createXMLSignature(): string {
+      _generateCadesFn(function createAttachedSignature(): string {
         let cadesSigner;
-        let cadesSignedXML;
+        let cadesSignedData;
 
         try {
           cadesSigner = __cadesAsyncToken__ + __createCadesPluginObject__('CAdESCOM.CPSigner');
-          cadesSignedXML = __cadesAsyncToken__ + __createCadesPluginObject__('CAdESCOM.SignedXML');
+          cadesSignedData = __cadesAsyncToken__ + __createCadesPluginObject__('CAdESCOM.CadesSignedData');
         } catch (error) {
           console.error(error);
 
@@ -42,13 +35,8 @@ export const createXadesSignature = _afterPluginsLoaded(
           void (
             __cadesAsyncToken__ + cadesSigner.propset_Options(cadesplugin.CAPICOM_CERTIFICATE_INCLUDE_END_ENTITY_ONLY)
           );
-          void (__cadesAsyncToken__ + cadesSignedXML.propset_Content(unencryptedMessage));
-          void (
-            __cadesAsyncToken__ +
-            cadesSignedXML.propset_SignatureType(
-              cadesplugin.CADESCOM_XML_SIGNATURE_TYPE_ENVELOPED | cadesplugin.CADESCOM_XADES_BES,
-            )
-          );
+          void (__cadesAsyncToken__ + cadesSignedData.propset_ContentEncoding(cadesplugin.CADESCOM_BASE64_TO_BINARY));
+          void (__cadesAsyncToken__ + cadesSignedData.propset_Content(unencryptedMessage));
         } catch (error) {
           console.error(error);
 
@@ -58,18 +46,15 @@ export const createXadesSignature = _afterPluginsLoaded(
         let signature: string;
 
         try {
-          signature = __cadesAsyncToken__ + cadesSignedXML.Sign(cadesSigner);
+          signature =
+            __cadesAsyncToken__ + cadesSignedData.SignCades(cadesSigner, cadesplugin.CADESCOM_PKCS7_TYPE, detached);
         } catch (error) {
           console.error(error);
 
           throw new Error(_extractMeaningfulErrorMessage(error) || 'Ошибка при подписании данных');
         }
 
-        return btoa(
-          encodeURIComponent(signature).replace(/%([0-9A-F]{2})/g, (_, p1) =>
-            String.fromCharCode(parseInt('0x' + p1, 16)),
-          ),
-        );
+        return signature;
       }),
     );
   },

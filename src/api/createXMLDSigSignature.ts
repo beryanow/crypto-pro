@@ -4,13 +4,13 @@ import { __cadesAsyncToken__, __createCadesPluginObject__, _generateCadesFn } fr
 import { _getCadesCert } from '../helpers/_getCadesCert';
 
 /**
- * Создает XADES-BES подпись для документа в формате XML
+ * Создает XML-DSig подпись для документа в формате XML
  *
  * @param thumbprint - отпечаток сертификата
  * @param unencryptedMessage - подписываемое сообщение в формате XML
  * @returns подпись
  */
-export const createXadesSignature = _afterPluginsLoaded(
+export const createXMLDSigSignature = _afterPluginsLoaded(
   async (thumbprint: string, unencryptedMessage: string): Promise<string> => {
     const { cadesplugin } = window;
     const cadesCertificate = await _getCadesCert(thumbprint);
@@ -46,7 +46,7 @@ export const createXadesSignature = _afterPluginsLoaded(
           void (
             __cadesAsyncToken__ +
             cadesSignedXML.propset_SignatureType(
-              cadesplugin.CADESCOM_XML_SIGNATURE_TYPE_ENVELOPED | cadesplugin.CADESCOM_XADES_BES,
+              cadesplugin.CADESCOM_XML_SIGNATURE_TYPE_ENVELOPED | cadesplugin.CADESCOM_XMLDSIG_TYPE,
             )
           );
         } catch (error) {
