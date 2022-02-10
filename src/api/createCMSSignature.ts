@@ -3,14 +3,7 @@ import { _extractMeaningfulErrorMessage } from '../helpers/_extractMeaningfulErr
 import { __cadesAsyncToken__, __createCadesPluginObject__, _generateCadesFn } from '../helpers/_generateCadesFn';
 import { _getCadesCert } from '../helpers/_getCadesCert';
 
-/**
- * Создает присоединенную подпись сообщения по отпечатку сертификата
- *
- * @param thumbprint - отпечаток сертификата
- * @param message - подписываемое сообщение
- * @returns подпись в формате PKCS#7
- */
-export const createCadesSignature = _afterPluginsLoaded(
+export const createCMSSignature = _afterPluginsLoaded(
   async (thumbprint: string, unencryptedMessage: string | ArrayBuffer, detached: boolean): Promise<string> => {
     const { cadesplugin } = window;
     const cadesCertificate = await _getCadesCert(thumbprint);

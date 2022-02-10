@@ -11,7 +11,7 @@ import { _getCadesCert } from '../helpers/_getCadesCert';
  * @returns подпись
  */
 
-export const createXadesXsltSignature = _afterPluginsLoaded(
+export const createXadesXPathFilter2Signature = _afterPluginsLoaded(
   async (thumbprint: string, unencryptedMessage: string, xsltSchemaMessage: string): Promise<string> => {
     const { cadesplugin } = window;
     const cadesCertificate = await _getCadesCert(thumbprint);
@@ -21,25 +21,16 @@ export const createXadesXsltSignature = _afterPluginsLoaded(
     <b>Text 1</b>
     <b>Text 2</b>
     <c>Comment</c>
-    <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="base64-content-signature">
+    <ds:Signature xmlns:dsig-xpath="http://www.w3.org/2002/06/xmldsig-filter2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="base64-content-signature">
         <ds:SignedInfo>
             <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
             <ds:SignatureMethod Algorithm="urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34102012-gostr34112012-256"/>
             <ds:Reference URI="">
                 <ds:Transforms>
                     <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
-                    <ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments"/>
-<!--                    <ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116">-->
-<!--                       <ds:XPath>ancestor-or-self::b</ds:XPath>-->
-<!--                    </ds:Transform>-->
-                    <ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xslt-19991116">
-                         <ds:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-                            <xsl:output method="text"/>
-                            <xsl:template match="/">
-                                wow
-                            </xsl:template>
-                         </ds:stylesheet>
-                     </ds:Transform>
+                    <ds:Transform Algorithm="http://www.w3.org/2002/06/xmldsig-filter2">
+                        <dsig-xpath:XPath Filter="subtract"> //b </dsig-xpath:XPath>
+                    </ds:Transform>
                 </ds:Transforms>
                 <ds:DigestMethod Algorithm="urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34112012-256"/>
                 <ds:DigestValue/>
@@ -50,7 +41,7 @@ export const createXadesXsltSignature = _afterPluginsLoaded(
     </ds:Signature>
 </a>`;
 
-    console.log('wow');
+    console.log('wow2');
     //     const sContent = `<?xml version="1.0" encoding="UTF-8"?>
     // <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
     //     <s:Body>
