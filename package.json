@@ -1,9 +1,9 @@
 {
-  "name": "crypto-pro",
-  "version": "2.3.0",
+  "name": "crypto-pro-enhanced",
+  "version": "2.3.2",
   "description": "API для взаимодействия с КриптоПро",
-  "main": "./lib/crypto-pro.js",
-  "types": "./lib/crypto-pro.d.ts",
+  "main": "./lib/crypto-pro-enhanced.js",
+  "types": "./lib/crypto-pro-enhanced.d.ts",
   "files": [
     "lib/**/*",
     "dist/**/*",
@@ -26,17 +26,15 @@
     "lint": "eslint --config .eslintrc.js './src/**/*'",
     "lint:fix": "eslint --fix --config .eslintrc.js './src/**/*'",
     "examples-update": "npm run examples-update:script-tag && npm run examples-update:angular && npm run examples-update:react",
-    "examples-update:script-tag": "npm --prefix ./examples/script-tag r crypto-pro && npm --prefix ./examples/script-tag i crypto-pro",
-    "examples-update:angular": "npm --prefix ./examples/angular r crypto-pro && npm --prefix ./examples/angular i crypto-pro",
-    "examples-update:react": "npm --prefix ./examples/react r crypto-pro && npm --prefix ./examples/react i crypto-pro",
-    "prepack": "npm run build",
-    "postpack": "npm run pack:uncompress && npm run pack:clean",
+    "examples-update:script-tag": "npm --prefix ./examples/script-tag r crypto-pro-enhanced && npm --prefix ./examples/script-tag i crypto-pro-enhanced",
+    "examples-update:angular": "npm --prefix ./examples/angular r crypto-pro-enhanced && npm --prefix ./examples/angular i crypto-pro-enhanced",
+    "examples-update:react": "npm --prefix ./examples/react r crypto-pro-enhanced && npm --prefix ./examples/react i crypto-pro-enhanced",
     "prepublishOnly": "npm run lint && jest && npm run build",
     "postpublish": "npm run examples-update"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/vgoma/crypto-pro"
+    "url": "https://github.com/vgoma/crypto-pro-enhanced"
   },
   "author": {
     "name": "Vitalii Goma",
@@ -46,7 +44,7 @@
   "keywords": [
     "crypto",
     "cryptopro",
-    "crypto-pro",
+    "crypto-pro-enhanced",
     "cades",
     "КриптоПро",
     "Крипто ПРО"

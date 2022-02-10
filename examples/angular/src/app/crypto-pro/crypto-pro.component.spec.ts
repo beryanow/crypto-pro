@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CryptoProComponent } from './crypto-pro.component';
+import { CryptoProComponent } from './crypto-pro-enhanced.component';
 
 describe('CryptoProComponent', () => {
   let component: CryptoProComponent;

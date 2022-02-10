@@ -3,10 +3,10 @@ import { _extractMeaningfulErrorMessage } from '../helpers/_extractMeaningfulErr
 import { __cadesAsyncToken__, __createCadesPluginObject__, _generateCadesFn } from '../helpers/_generateCadesFn';
 import { _getCadesCert } from '../helpers/_getCadesCert';
 import { _generateUUID } from '../helpers/_generateUUID';
-import { _getBase64Representation } from "../helpers/_getBase64Representation";
+import { _getBase64Representation } from '../helpers/_getBase64Representation';
 
 const createSignatureTemplate = (contentBase64: string): string =>
-`<?xml version="1.0" encoding="UTF-8"?>
+  `<?xml version="1.0" encoding="UTF-8"?>
 <Content>
     ${contentBase64}
     <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="${_generateUUID()}">

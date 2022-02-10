@@ -10,12 +10,12 @@ import {
   execute,
   SystemInfo,
   Certificate
-} from 'crypto-pro';
+} from 'crypto-pro-enhanced';
 
 @Component({
-  selector: 'app-crypto-pro',
-  templateUrl: './crypto-pro.component.html',
-  styleUrls: ['./crypto-pro.component.css']
+  selector: 'app-crypto-pro-enhanced',
+  templateUrl: './crypto-pro-enhanced.component.html',
+  styleUrls: ['./crypto-pro-enhanced.component.css']
 })
 export class CryptoProComponent implements OnInit {
   public message = 'Привет мир!';
@@ -149,7 +149,7 @@ export class CryptoProComponent implements OnInit {
   private async displayCustomSystemInfo() {
     this.customSystemInfoError = null;
 
-    // Crypto-Pro GOST R 34.10-2001 Cryptographic Service Provider
+    // crypto-pro-enhanced GOST R 34.10-2001 Cryptographic Service Provider
     const providerType = 75;
 
     try {

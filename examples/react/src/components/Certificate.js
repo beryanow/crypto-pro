@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getCertificate, getUserCertificates } from 'crypto-pro';
+import { getCertificate, getUserCertificates } from 'crypto-pro-enhanced';
 
 function Certificate({onChange}) {
   const [certificates, setCertificates] = useState([]);

@@ -20,7 +20,7 @@ describe('_generateCadesFn', () => {
 
                 console.log('hello from named function');
             
-})();//# sourceURL=crypto-pro_namedFunction.js`,
+})();//# sourceURL=crypto-pro-enhanced_namedFunction.js`,
       );
     });
 
@@ -29,7 +29,7 @@ describe('_generateCadesFn', () => {
         `(function anonymous(
 ) {
  return console.log('hello from arrow function'); 
-})();//# sourceURL=crypto-pro_dynamicFn.js`,
+})();//# sourceURL=crypto-pro-enhanced_dynamicFn.js`,
       );
     });
 
@@ -52,7 +52,7 @@ describe('_generateCadesFn', () => {
                 void (cadesFoo.WhateverProperty = 'whatever value');
                 void (cadesBarNoMatterWhat.whateverMethod(cadesFoo));
             
-})();//# sourceURL=crypto-pro_methodInSyncEnvironment.js`,
+})();//# sourceURL=crypto-pro-enhanced_methodInSyncEnvironment.js`,
       );
     });
 
@@ -75,7 +75,7 @@ describe('_generateCadesFn', () => {
                 void (cadesFoo.WhateverProperty = 'whatever value');
                 void (cadesBarNoMatterWhat.whateverMethod(cadesFoo));
             
-})();//# sourceURL=crypto-pro_customSyncEnvImplementation.js`,
+})();//# sourceURL=crypto-pro-enhanced_customSyncEnvImplementation.js`,
       );
     });
   });
@@ -104,7 +104,7 @@ describe('_generateCadesFn', () => {
                 void (yield cadesFoo.propset_WhateverProperty('whatever value'));
                 void (yield cadesBarNoMatterWhat.whateverMethod(cadesFoo));
             
-});//# sourceURL=crypto-pro_methodInAsyncEnvironment.js`,
+});//# sourceURL=crypto-pro-enhanced_methodInAsyncEnvironment.js`,
       );
     });
 
@@ -127,7 +127,7 @@ describe('_generateCadesFn', () => {
                 void (yield cadesFoo.propset_WhateverProperty('whatever value'));
                 void (yield cadesBarNoMatterWhat.whateverMethod(cadesFoo));
             
-});//# sourceURL=crypto-pro_customAsyncEnvImplementation.js`,
+});//# sourceURL=crypto-pro-enhanced_customAsyncEnvImplementation.js`,
       );
     });
   });

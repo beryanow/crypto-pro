@@ -4,7 +4,7 @@
 [![Coverage Status][coveralls-image]][coveralls-url]
 [![Examples][examples-image]][examples-url]
 [![Donate][donate-image]][donate-url]
-<a href="https://www.jetbrains.com/?from=crypto-pro" title="При поддержке Jetbrains"><img src="resources/logo-webstorm.svg" height="20"></a>
+<a href="https://www.jetbrains.com/?from=crypto-pro-enhanced" title="При поддержке Jetbrains"><img src="resources/logo-webstorm.svg" height="20"></a>
 
 <a name="cryptopro"></a>
 # cryptoPro
@@ -61,22 +61,22 @@
 ## Установка
 Для NPM:
 ```bash
-npm install crypto-pro
+npm install crypto-pro-enhanced
 ```
 
 Для Yarn:
 ```bash
-yarn add crypto-pro
+yarn add crypto-pro-enhanced
 ```
 
 Для Bower:
 ```bash
-bower install crypto-pro
+bower install crypto-pro-enhanced
 ```
 
 Подключение пакета как UMD модуля через тэг script:
 ```html
-<script src="crypto-pro/dist/crypto-pro.min.js"></script>
+<script src="crypto-pro-enhanced/dist/crypto-pro-enhanced.min.js"></script>
 <script>
 window.cryptoPro.getUserCertificates()
   .then(function (certificates) {
@@ -90,7 +90,7 @@ window.cryptoPro.getUserCertificates()
 
 Подключение пакета как ES модуля с Typescript или JavaScript:
 ```typescript
-import { getUserCertificates, Certificate } from 'crypto-pro';
+import { getUserCertificates, Certificate } from 'crypto-pro-enhanced';
 
 (async () => {
   let certificates: Certificate[];
@@ -223,7 +223,7 @@ npm run serve
 - Убрана поддержка КриптоПРО ЭЦП browser plug-in версий ниже 2.0
 - Доработана обработка ошибок, выбрасываемых из Крипто ПРО
 - При написании кода будут работать автодополнения и подсказки
-- Исправлена [проблема](https://github.com/vgoma/crypto-pro/issues/11) работы библиотеки с UglifyJs
+- Исправлена [проблема](https://github.com/vgoma/crypto-pro-enhanced/issues/11) работы библиотеки с UglifyJs
 - Методы API доступны напрямую:
 
 В версии 1:
@@ -238,7 +238,7 @@ window.cryptoPro.getSystemInfo();
 
 В версии 2 (ES Modules):
 ```javascript
-import { getSystemInfo } from 'crypto-pro';
+import { getSystemInfo } from 'crypto-pro-enhanced';
 
 getSystemInfo();
 ```
@@ -271,7 +271,7 @@ npm i
 npm link ../../
 npm start
 ```
-> После выполнения `npm link ../../` в директории `examples/script-tag/node_modules` папка `crypto-pro` станет ярлыком,
+> После выполнения `npm link ../../` в директории `examples/script-tag/node_modules` папка `crypto-pro-enhanced` станет ярлыком,
 > указывающим на папку содержащую локально собранный пакет.
 
 <a name="tests-execution"></a>
@@ -478,14 +478,14 @@ ldd libnpcades.so
 # Лицензия
 MIT
 
-[npm-url]: https://npmjs.org/package/crypto-pro
-[npm-version-image]: http://img.shields.io/npm/v/crypto-pro.svg?style=flat
-[npm-downloads-image]: http://img.shields.io/npm/dm/crypto-pro.svg?style=flat
-[downloads-url]: https://npmcharts.com/compare/crypto-pro?minimal=true
-[travis-url]: https://travis-ci.org/vgoma/crypto-pro
-[travis-image]: http://img.shields.io/travis/vgoma/crypto-pro/master.svg?style=flat
-[coveralls-image]: https://coveralls.io/repos/github/vgoma/crypto-pro/badge.svg?branch=master
-[coveralls-url]: https://coveralls.io/github/vgoma/crypto-pro?branch=master
+[npm-url]: https://npmjs.org/package/crypto-pro-enhanced
+[npm-version-image]: http://img.shields.io/npm/v/crypto-pro-enhanced.svg?style=flat
+[npm-downloads-image]: http://img.shields.io/npm/dm/crypto-pro-enhanced.svg?style=flat
+[downloads-url]: https://npmcharts.com/compare/crypto-pro-enhanced?minimal=true
+[travis-url]: https://travis-ci.org/vgoma/crypto-pro-enhanced
+[travis-image]: http://img.shields.io/travis/vgoma/crypto-pro-enhanced/master.svg?style=flat
+[coveralls-image]: https://coveralls.io/repos/github/vgoma/crypto-pro-enhanced/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/github/vgoma/crypto-pro-enhanced?branch=master
 [donate-image]: https://img.shields.io/badge/%D1%81%D0%BF%D0%B0%D1%81%D0%B8%D0%B1%D0%BE-%E2%82%BD-yellow
 [donate-url]: https://money.yandex.ru/to/410011609769902
 [examples-image]: https://img.shields.io/badge/examples-folder-pink

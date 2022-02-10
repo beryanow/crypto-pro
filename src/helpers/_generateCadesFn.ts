@@ -33,6 +33,6 @@ export const _generateCadesFn = (callback: Function): string => {
 
   return [
     cadesGeneratorsAPI ? `cadesplugin.async_spawn(${crossEnvCallbackLiteral});` : `(${crossEnvCallbackLiteral})();`,
-    `//# sourceURL=crypto-pro_${callbackName}.js`,
+    `//# sourceURL=crypto-pro-enhanced_${callbackName}.js`,
   ].join('');
 };

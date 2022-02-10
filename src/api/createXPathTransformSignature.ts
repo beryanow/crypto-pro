@@ -68,9 +68,7 @@ export const createXPathTransformSignature = _afterPluginsLoaded(
 
     parsedXml.documentElement.append(signatureTemplate);
 
-    const templateXml = new XMLSerializer().serializeToString(parsedXml)
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>');
+    const templateXml = new XMLSerializer().serializeToString(parsedXml).replace(/&lt;/g, '<').replace(/&gt;/g, '>');
 
     return eval(
       _generateCadesFn(function createXMLSignature(): string {

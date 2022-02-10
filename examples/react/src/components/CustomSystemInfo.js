@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { execute } from 'crypto-pro';
+import { execute } from 'crypto-pro-enhanced';
 
 function CustomSystemInfo() {
   const [customSystemInfo, setCustomSystemInfo] = useState(null);
@@ -8,7 +8,7 @@ function CustomSystemInfo() {
   useEffect(() => {
     (async () => {
       try {
-        // Crypto-Pro GOST R 34.10-2001 Cryptographic Service Provider
+        // crypto-pro-enhanced GOST R 34.10-2001 Cryptographic Service Provider
         const providerType = 75;
 
         setCustomSystemInfo(await execute(function (utils) {

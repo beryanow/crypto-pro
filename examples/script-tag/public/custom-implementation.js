@@ -5,7 +5,7 @@
   'use strict';
 
   function customAboutImplementation() {
-    // Crypto-Pro GOST R 34.10-2001 Cryptographic Service Provider
+    // crypto-pro-enhanced GOST R 34.10-2001 Cryptographic Service Provider
     var providerType = 75;
 
     return window.cryptoPro.execute(function (utils) {

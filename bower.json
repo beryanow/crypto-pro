@@ -1,7 +1,7 @@
 {
-  "name": "crypto-pro",
+  "name": "crypto-pro-enhanced",
   "description": "API для взаимодействия с КриптоПро",
-  "main": "./lib/crypto-pro.js",
+  "main": "./lib/crypto-pro-enhanced.js",
   "authors": [
     "vgoma <vgoma@yandex.ru>"
   ],
@@ -9,12 +9,12 @@
   "keywords": [
     "crypto",
     "cryptopro",
-    "crypto-pro",
+    "crypto-pro-enhanced",
     "cades",
     "КриптоПро",
     "Крипто ПРО"
   ],
-  "homepage": "https://github.com/vgoma/crypto-pro",
+  "homepage": "https://github.com/vgoma/crypto-pro-enhanced",
   "ignore": [
     "**/.*",
     "/*.js",

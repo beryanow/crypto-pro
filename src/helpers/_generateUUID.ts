@@ -14,4 +14,4 @@ export const _generateUUID = (): string => {
   }
 
   return uuid;
-}
+};
