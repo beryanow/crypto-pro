@@ -14,6 +14,7 @@ export * from './createXMLDSigTemplateSignature';
 export * from './createXMLDSigSignature';
 export * from './createDetachedSignature';
 export * from './createCMSSignature';
+export * from './createRawSignature';
 export * from './createHash';
 export * from './certificate';
 export * from './execute';

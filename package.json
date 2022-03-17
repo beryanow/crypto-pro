@@ -1,6 +1,6 @@
 {
   "name": "crypto-pro-enhanced",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "API для взаимодействия с КриптоПро",
   "main": "./lib/crypto-pro-enhanced.js",
   "types": "./lib/crypto-pro-enhanced.d.ts",
