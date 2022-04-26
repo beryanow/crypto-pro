@@ -733,7 +733,7 @@
     }
     else
     {
-        setTimeout(check_load_timeout, 20000);
+        setTimeout(check_load_timeout, 3000);
     }
 
     set_constantValues();

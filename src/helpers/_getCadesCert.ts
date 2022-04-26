@@ -33,7 +33,7 @@ export const _getCadesCert = _afterPluginsLoaded(
           void (
             __cadesAsyncToken__ +
             cadesStore.Open(
-              cadesplugin.CAPICOM_CURRENT_USER_STORE,
+              cadesplugin.CADESCOM_CONTAINER_STORE,
               cadesplugin.CAPICOM_MY_STORE,
               cadesplugin.CAPICOM_STORE_OPEN_MAXIMUM_ALLOWED,
             )

@@ -16,5 +16,8 @@ export * from './createDetachedSignature';
 export * from './createCMSSignature';
 export * from './createRawSignature';
 export * from './createHash';
+export * from './checkExtensionLoaded';
+export * from './checkPluginLoaded';
+export * from './checkProviderLoaded';
 export * from './certificate';
 export * from './execute';
