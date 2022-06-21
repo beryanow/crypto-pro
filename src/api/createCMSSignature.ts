@@ -47,6 +47,14 @@ export const createCMSSignature = _afterPluginsLoaded(
           throw new Error(_extractMeaningfulErrorMessage(error) || 'Ошибка при подписании данных');
         }
 
+        try {
+          __cadesAsyncToken__ + cadesSignedData.VerifyCades(signature, cadesplugin.CADESCOM_CADES_BES, detached);
+        } catch (error) {
+          console.error(error);
+
+          throw new Error(_extractMeaningfulErrorMessage(error) || 'Ошибка при проверке подписанных данных');
+        }
+
         return signature;
       }),
     );

@@ -19,5 +19,7 @@ export * from './createHash';
 export * from './checkExtensionLoaded';
 export * from './checkPluginLoaded';
 export * from './checkProviderLoaded';
+export * from './checkXMLSignature';
+export * from './checkCMSSignature';
 export * from './certificate';
 export * from './execute';
