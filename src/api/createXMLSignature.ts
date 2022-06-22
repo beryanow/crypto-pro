@@ -3,7 +3,8 @@ import { _extractMeaningfulErrorMessage } from '../helpers/_extractMeaningfulErr
 import { __cadesAsyncToken__, __createCadesPluginObject__, _generateCadesFn } from '../helpers/_generateCadesFn';
 import { _getCadesCert } from '../helpers/_getCadesCert';
 import { _generateUUID } from '../helpers/_generateUUID';
-import { _getBase64Representation } from '../helpers/_getBase64Representation';
+import { _encodeBase64Representation } from '../helpers/_encodeBase64Representation';
+import { _decodeBase64Representation } from '../helpers/_decodeBase64Representation';
 
 const createSignatureTemplate = (contentBase64: string): string =>
   `<?xml version="1.0" encoding="UTF-8"?>
@@ -63,7 +64,7 @@ export const createXMLSignature = _afterPluginsLoaded(
 
           void (__cadesAsyncToken__ + cadesSigner.propset_Certificate(cadesCertificate));
           void (__cadesAsyncToken__ + cadesSigner.propset_CheckCertificate(false));
-          void (__cadesAsyncToken__ + cadesSignedXML.propset_Content(unencryptedMessage));
+          void (__cadesAsyncToken__ + cadesSignedXML.propset_Content(_encodeBase64Representation(unencryptedMessage)));
           void (
             __cadesAsyncToken__ + cadesSigner.propset_Options(cadesplugin.CAPICOM_CERTIFICATE_INCLUDE_END_ENTITY_ONLY)
           );
@@ -86,7 +87,15 @@ export const createXMLSignature = _afterPluginsLoaded(
           throw new Error(_extractMeaningfulErrorMessage(error) || 'Ошибка при подписании данных');
         }
 
-        return _getBase64Representation(signature);
+        try {
+          __cadesAsyncToken__ + cadesSignedXML.Verify(signature);
+        } catch (error) {
+          console.error(error);
+
+          throw new Error(_extractMeaningfulErrorMessage(error) || 'Ошибка при проверке подписанных данных');
+        }
+
+        return _decodeBase64Representation(signature);
       }),
     );
   },

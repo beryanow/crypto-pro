@@ -3978,7 +3978,8 @@ var _extractMeaningfulErrorMessage_1 = __webpack_require__(/*! ../helpers/_extra
 var _generateCadesFn_1 = __webpack_require__(/*! ../helpers/_generateCadesFn */ "./helpers/_generateCadesFn.ts");
 var _getCadesCert_1 = __webpack_require__(/*! ../helpers/_getCadesCert */ "./helpers/_getCadesCert.ts");
 var _generateUUID_1 = __webpack_require__(/*! ../helpers/_generateUUID */ "./helpers/_generateUUID.ts");
-var _getBase64Representation_1 = __webpack_require__(/*! ../helpers/_getBase64Representation */ "./helpers/_getBase64Representation.ts");
+var _encodeBase64Representation_1 = __webpack_require__(/*! ../helpers/_encodeBase64Representation */ "./helpers/_encodeBase64Representation.ts");
+var _decodeBase64Representation_1 = __webpack_require__(/*! ../helpers/_decodeBase64Representation */ "./helpers/_decodeBase64Representation.ts");
 var createSignatureTemplate = function (contentBase64) {
     return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Content>\n    " + contentBase64 + "\n    <ds:Signature xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" Id=\"" + _generateUUID_1._generateUUID() + "\">\n        <ds:SignedInfo>\n            <ds:CanonicalizationMethod Algorithm=\"http://www.w3.org/2001/10/xml-exc-c14n#\"/>\n            <ds:SignatureMethod Algorithm=\"urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34102012-gostr34112012-256\"/>\n            <ds:Reference URI=\"\">\n                <ds:Transforms>\n                    <ds:Transform Algorithm=\"http://www.w3.org/2000/09/xmldsig#enveloped-signature\"/>\n                </ds:Transforms>\n                <ds:DigestMethod Algorithm=\"urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34112012-256\"/>\n                <ds:DigestValue/>\n            </ds:Reference>\n        </ds:SignedInfo>\n        <ds:SignatureValue/>\n        <ds:KeyInfo/>\n    </ds:Signature>\n</Content>";
 };
@@ -4017,7 +4018,7 @@ exports.createXMLSignature = _afterPluginsLoaded_1._afterPluginsLoaded(function 
                             var digestMethod = 'urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34112012-256';
                             void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_Certificate(cadesCertificate));
                             void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_CheckCertificate(false));
-                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSignedXML.propset_Content(unencryptedMessage));
+                            void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSignedXML.propset_Content(_encodeBase64Representation_1._encodeBase64Representation(unencryptedMessage)));
                             void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_Options(cadesplugin.CAPICOM_CERTIFICATE_INCLUDE_END_ENTITY_ONLY));
                             void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSignedXML.propset_SignatureType(CADESCOM_SIGNATURE_TYPE));
                             void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSignedXML.propset_SignatureMethod(signatureMethod));
@@ -4035,7 +4036,14 @@ exports.createXMLSignature = _afterPluginsLoaded_1._afterPluginsLoaded(function 
                             console.error(error);
                             throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при подписании данных');
                         }
-                        return _getBase64Representation_1._getBase64Representation(signature);
+                        try {
+                            _generateCadesFn_1.__cadesAsyncToken__ + cadesSignedXML.Verify(signature);
+                        }
+                        catch (error) {
+                            console.error(error);
+                            throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при проверке подписанных данных');
+                        }
+                        return _decodeBase64Representation_1._decodeBase64Representation(signature);
                     }))];
         }
     });
@@ -5845,6 +5853,43 @@ exports._convertHexToBase64 = function (hex) {
 
 /***/ }),
 
+/***/ "./helpers/_decodeBase64Representation.ts":
+/*!************************************************!*\
+  !*** ./helpers/_decodeBase64Representation.ts ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports._decodeBase64Representation = function (signature) {
+    return decodeURIComponent(atob(signature)
+        .split('')
+        .map(function (c) { return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); })
+        .join(''));
+};
+
+
+/***/ }),
+
+/***/ "./helpers/_encodeBase64Representation.ts":
+/*!************************************************!*\
+  !*** ./helpers/_encodeBase64Representation.ts ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports._encodeBase64Representation = function (signature) {
+    return btoa(encodeURIComponent(signature).replace(/%([0-9A-F]{2})/g, function (_, p1) { return String.fromCharCode(parseInt('0x' + p1, 16)); }));
+};
+
+
+/***/ }),
+
 /***/ "./helpers/_extractCommonName.ts":
 /*!***************************************!*\
   !*** ./helpers/_extractCommonName.ts ***!
@@ -5957,23 +6002,6 @@ exports._generateUUID = function () {
         uuid += (i == 12 ? 4 : i == 16 ? (random & 3) | 8 : random).toString(16);
     }
     return uuid;
-};
-
-
-/***/ }),
-
-/***/ "./helpers/_getBase64Representation.ts":
-/*!*********************************************!*\
-  !*** ./helpers/_getBase64Representation.ts ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports._getBase64Representation = function (signature) {
-    return btoa(encodeURIComponent(signature).replace(/%([0-9A-F]{2})/g, function (_, p1) { return String.fromCharCode(parseInt('0x' + p1, 16)); }));
 };
 
 
