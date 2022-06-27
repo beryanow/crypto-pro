@@ -3085,16 +3085,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _afterPluginsLoaded_1 = __webpack_require__(/*! ../helpers/_afterPluginsLoaded */ "./helpers/_afterPluginsLoaded.ts");
 var _extractMeaningfulErrorMessage_1 = __webpack_require__(/*! ../helpers/_extractMeaningfulErrorMessage */ "./helpers/_extractMeaningfulErrorMessage.ts");
 var _generateCadesFn_1 = __webpack_require__(/*! ../helpers/_generateCadesFn */ "./helpers/_generateCadesFn.ts");
-var _getCadesCert_1 = __webpack_require__(/*! ../helpers/_getCadesCert */ "./helpers/_getCadesCert.ts");
+var getCertificate_1 = __webpack_require__(/*! ./getCertificate */ "./api/getCertificate.ts");
 exports.createCMSSignature = _afterPluginsLoaded_1._afterPluginsLoaded(function (thumbprint, unencryptedMessage, detached) { return __awaiter(void 0, void 0, void 0, function () {
-    var cadesplugin, cadesCertificate;
+    var cadesplugin, certificate, cadesCertificate, algorithm;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 cadesplugin = window.cadesplugin;
-                return [4 /*yield*/, _getCadesCert_1._getCadesCert(thumbprint)];
+                return [4 /*yield*/, getCertificate_1.getCertificate(thumbprint)];
             case 1:
-                cadesCertificate = _a.sent();
+                certificate = _a.sent();
+                cadesCertificate = certificate._cadesCertificate;
+                return [4 /*yield*/, certificate.getAlgorithm()];
+            case 2:
+                algorithm = _a.sent();
+                if (algorithm.oid !== '1.2.643.7.1.1.1.1' && algorithm.oid !== '1.2.643.7.1.1.1.2') {
+                    throw new Error('Передан сертификат с неподдерживаемым алгоритмом открытого ключа');
+                }
                 return [2 /*return*/, eval(_generateCadesFn_1._generateCadesFn(function createAttachedSignature() {
                         var cadesSigner;
                         var cadesSignedData;
@@ -3976,22 +3983,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _afterPluginsLoaded_1 = __webpack_require__(/*! ../helpers/_afterPluginsLoaded */ "./helpers/_afterPluginsLoaded.ts");
 var _extractMeaningfulErrorMessage_1 = __webpack_require__(/*! ../helpers/_extractMeaningfulErrorMessage */ "./helpers/_extractMeaningfulErrorMessage.ts");
 var _generateCadesFn_1 = __webpack_require__(/*! ../helpers/_generateCadesFn */ "./helpers/_generateCadesFn.ts");
-var _getCadesCert_1 = __webpack_require__(/*! ../helpers/_getCadesCert */ "./helpers/_getCadesCert.ts");
 var _generateUUID_1 = __webpack_require__(/*! ../helpers/_generateUUID */ "./helpers/_generateUUID.ts");
 var _encodeBase64Representation_1 = __webpack_require__(/*! ../helpers/_encodeBase64Representation */ "./helpers/_encodeBase64Representation.ts");
 var _decodeBase64Representation_1 = __webpack_require__(/*! ../helpers/_decodeBase64Representation */ "./helpers/_decodeBase64Representation.ts");
+var getCertificate_1 = __webpack_require__(/*! ./getCertificate */ "./api/getCertificate.ts");
 var createSignatureTemplate = function (contentBase64) {
     return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Content>\n    " + contentBase64 + "\n    <ds:Signature xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" Id=\"" + _generateUUID_1._generateUUID() + "\">\n        <ds:SignedInfo>\n            <ds:CanonicalizationMethod Algorithm=\"http://www.w3.org/2001/10/xml-exc-c14n#\"/>\n            <ds:SignatureMethod Algorithm=\"urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34102012-gostr34112012-256\"/>\n            <ds:Reference URI=\"\">\n                <ds:Transforms>\n                    <ds:Transform Algorithm=\"http://www.w3.org/2000/09/xmldsig#enveloped-signature\"/>\n                </ds:Transforms>\n                <ds:DigestMethod Algorithm=\"urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34112012-256\"/>\n                <ds:DigestValue/>\n            </ds:Reference>\n        </ds:SignedInfo>\n        <ds:SignatureValue/>\n        <ds:KeyInfo/>\n    </ds:Signature>\n</Content>";
 };
 exports.createXMLSignature = _afterPluginsLoaded_1._afterPluginsLoaded(function (thumbprint, unencryptedMessage, advanced, xml) { return __awaiter(void 0, void 0, void 0, function () {
-    var cadesplugin, cadesCertificate, CADESCOM_SIGNATURE_TYPE;
+    var cadesplugin, certificate, cadesCertificate, CADESCOM_SIGNATURE_TYPE, algorithm, signatureMethod, digestMethod;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 cadesplugin = window.cadesplugin;
-                return [4 /*yield*/, _getCadesCert_1._getCadesCert(thumbprint)];
+                return [4 /*yield*/, getCertificate_1.getCertificate(thumbprint)];
             case 1:
-                cadesCertificate = _a.sent();
+                certificate = _a.sent();
+                cadesCertificate = certificate._cadesCertificate;
                 CADESCOM_SIGNATURE_TYPE = cadesplugin.CADESCOM_XML_SIGNATURE_TYPE_TEMPLATE;
                 if (xml) {
                     CADESCOM_SIGNATURE_TYPE = cadesplugin.CADESCOM_XML_SIGNATURE_TYPE_ENVELOPED;
@@ -4001,6 +4009,21 @@ exports.createXMLSignature = _afterPluginsLoaded_1._afterPluginsLoaded(function 
                 }
                 if (advanced) {
                     CADESCOM_SIGNATURE_TYPE |= cadesplugin.CADESCOM_XADES_BES;
+                }
+                return [4 /*yield*/, certificate.getAlgorithm()];
+            case 2:
+                algorithm = _a.sent();
+                switch (algorithm.oid) {
+                    case '1.2.643.7.1.1.1.1':
+                        signatureMethod = 'urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34102012-gostr34112012-256';
+                        digestMethod = 'urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34112012-256';
+                        break;
+                    case '1.2.643.7.1.1.1.2':
+                        signatureMethod = 'urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34102012-gostr34112012-512';
+                        digestMethod = 'urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34112012-512';
+                        break;
+                    default:
+                        throw new Error('Передан сертификат с неподдерживаемым алгоритмом открытого ключа');
                 }
                 return [2 /*return*/, eval(_generateCadesFn_1._generateCadesFn(function createXMLSignature() {
                         var cadesSigner;
@@ -4014,8 +4037,6 @@ exports.createXMLSignature = _afterPluginsLoaded_1._afterPluginsLoaded(function 
                             throw new Error(_extractMeaningfulErrorMessage_1._extractMeaningfulErrorMessage(error) || 'Ошибка при инициализации подписи');
                         }
                         try {
-                            var signatureMethod = 'urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34102012-gostr34112012-256';
-                            var digestMethod = 'urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34112012-256';
                             void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_Certificate(cadesCertificate));
                             void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSigner.propset_CheckCertificate(false));
                             void (_generateCadesFn_1.__cadesAsyncToken__ + cadesSignedXML.propset_Content(_encodeBase64Representation_1._encodeBase64Representation(unencryptedMessage)));

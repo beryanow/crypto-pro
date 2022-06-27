@@ -14,7 +14,7 @@ export declare class Certificate {
     getIssuerInfo(): Promise<TagTranslation[]>;
     getExtendedKeyUsage(): Promise<string[]>;
     getDecodedExtendedKeyUsage(): Promise<ExtendedKeysTranslations>;
-    getAlgorithm(): Promise<string>;
+    getAlgorithm(): Promise<any>;
     getCadesProp(propName: any): Promise<any>;
     isValid(): Promise<boolean>;
     exportBase64(): Promise<string>;

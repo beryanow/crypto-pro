@@ -1,10 +1,10 @@
 import { _afterPluginsLoaded } from '../helpers/_afterPluginsLoaded';
 import { _extractMeaningfulErrorMessage } from '../helpers/_extractMeaningfulErrorMessage';
 import { __cadesAsyncToken__, __createCadesPluginObject__, _generateCadesFn } from '../helpers/_generateCadesFn';
-import { _getCadesCert } from '../helpers/_getCadesCert';
 import { _generateUUID } from '../helpers/_generateUUID';
 import { _encodeBase64Representation } from '../helpers/_encodeBase64Representation';
 import { _decodeBase64Representation } from '../helpers/_decodeBase64Representation';
+import { getCertificate } from './getCertificate';
 
 const createSignatureTemplate = (contentBase64: string): string =>
   `<?xml version="1.0" encoding="UTF-8"?>
@@ -30,7 +30,8 @@ const createSignatureTemplate = (contentBase64: string): string =>
 export const createXMLSignature = _afterPluginsLoaded(
   async (thumbprint: string, unencryptedMessage: string, advanced: boolean, xml: boolean): Promise<string> => {
     const { cadesplugin } = window;
-    const cadesCertificate = await _getCadesCert(thumbprint);
+    const certificate = await getCertificate(thumbprint);
+    const cadesCertificate = certificate._cadesCertificate;
 
     let CADESCOM_SIGNATURE_TYPE = cadesplugin.CADESCOM_XML_SIGNATURE_TYPE_TEMPLATE;
 
@@ -42,6 +43,24 @@ export const createXMLSignature = _afterPluginsLoaded(
 
     if (advanced) {
       CADESCOM_SIGNATURE_TYPE |= cadesplugin.CADESCOM_XADES_BES;
+    }
+
+    const algorithm = await certificate.getAlgorithm();
+
+    let signatureMethod;
+    let digestMethod;
+
+    switch (algorithm.oid) {
+      case '1.2.643.7.1.1.1.1':
+        signatureMethod = 'urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34102012-gostr34112012-256';
+        digestMethod = 'urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34112012-256';
+        break;
+      case '1.2.643.7.1.1.1.2':
+        signatureMethod = 'urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34102012-gostr34112012-512';
+        digestMethod = 'urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34112012-512';
+        break;
+      default:
+        throw new Error('Передан сертификат с неподдерживаемым алгоритмом открытого ключа');
     }
 
     return eval(
@@ -59,9 +78,6 @@ export const createXMLSignature = _afterPluginsLoaded(
         }
 
         try {
-          const signatureMethod = 'urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34102012-gostr34112012-256';
-          const digestMethod = 'urn:ietf:params:xml:ns:cpxmlsec:algorithms:gostr34112012-256';
-
           void (__cadesAsyncToken__ + cadesSigner.propset_Certificate(cadesCertificate));
           void (__cadesAsyncToken__ + cadesSigner.propset_CheckCertificate(false));
           void (__cadesAsyncToken__ + cadesSignedXML.propset_Content(_encodeBase64Representation(unencryptedMessage)));

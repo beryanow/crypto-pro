@@ -38,7 +38,7 @@ export class Certificate {
     return getDecodedExtendedKeyUsage.call(this);
   }
 
-  public getAlgorithm(): Promise<string> {
+  public getAlgorithm(): Promise<any> {
     return getAlgorithm.call(this);
   }
 

@@ -1,12 +1,19 @@
 import { _afterPluginsLoaded } from '../helpers/_afterPluginsLoaded';
 import { _extractMeaningfulErrorMessage } from '../helpers/_extractMeaningfulErrorMessage';
 import { __cadesAsyncToken__, __createCadesPluginObject__, _generateCadesFn } from '../helpers/_generateCadesFn';
-import { _getCadesCert } from '../helpers/_getCadesCert';
+import { getCertificate } from './getCertificate';
 
 export const createCMSSignature = _afterPluginsLoaded(
   async (thumbprint: string, unencryptedMessage: string | ArrayBuffer, detached: boolean): Promise<string> => {
     const { cadesplugin } = window;
-    const cadesCertificate = await _getCadesCert(thumbprint);
+    const certificate = await getCertificate(thumbprint);
+    const cadesCertificate = certificate._cadesCertificate;
+
+    const algorithm = await certificate.getAlgorithm();
+
+    if (algorithm.oid !== '1.2.643.7.1.1.1.1' && algorithm.oid !== '1.2.643.7.1.1.1.2') {
+      throw new Error('Передан сертификат с неподдерживаемым алгоритмом открытого ключа');
+    }
 
     return eval(
       _generateCadesFn(function createAttachedSignature(): string {
